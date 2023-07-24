@@ -5,19 +5,19 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/pcpratheesh/go-healthwatch/config"
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
 	"github.com/pcpratheesh/go-healthwatch/service"
-	"github.com/pcpratheesh/go-healthwatch/worker"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
+	"github.com/pcpratheesh/go-healthwatch/utils/worker"
 	"github.com/sirupsen/logrus"
 )
 
 type Options func(health *HealthCheck)
 
 type HealthCheck struct {
-	Checks                    []models.HealthCheckConfig
-	StatusNotificationWebhook models.ServiceStatusNotificationHook
+	Checks                    []config.HealthCheckConfig
+	StatusNotificationWebhook config.ServiceStatusNotificationHook
 }
 
 // NewChecker
@@ -32,28 +32,28 @@ func NewChecker(options ...Options) *HealthCheck {
 }
 
 // AddIntegrations
-func WithIntegrations(checks []models.HealthCheckConfig) Options {
+func WithIntegrations(checks []config.HealthCheckConfig) Options {
 	return func(health *HealthCheck) {
 		health.Checks = checks
 	}
 }
 
 // WithServiceFailureHandler
-func WithServiceStatusWebHook(handler models.ServiceStatusNotificationHook) Options {
+func WithServiceStatusWebHook(handler config.ServiceStatusNotificationHook) Options {
 	return func(health *HealthCheck) {
 		health.StatusNotificationWebhook = handler
 	}
 }
 
 // Append new integration
-func (health *HealthCheck) AddIntegration(integration models.HealthCheckConfig) *HealthCheck {
+func (health *HealthCheck) AddIntegration(integration config.HealthCheckConfig) *HealthCheck {
 	health.Checks = append(health.Checks, integration)
 	return health
 }
 
 // Custom checking
-func (health *HealthCheck) AddCheck(name string, callback models.CustomHandler) {
-	models.CustomHandlerMap[name] = callback
+func (health *HealthCheck) AddCheck(name string, callback config.CustomHandler) {
+	config.CustomHandlerMap[name] = callback
 }
 
 // Check the services status integrated
@@ -75,7 +75,7 @@ func (health *HealthCheck) Check() {
 
 func main() {
 	checker := NewChecker(
-		WithIntegrations([]models.HealthCheckConfig{
+		WithIntegrations([]config.HealthCheckConfig{
 			{
 				Name:       "profile-api",
 				URL:        "https://profile-dev.my.mtn.com/api/v1/health",
@@ -84,7 +84,7 @@ func main() {
 				Interval:   time.Second * 1,
 			},
 		}),
-		// WithServiceStatusWebHook(func(check models.HealthCheckConfig, statusCode constants.HealthCheckStatus, err errors.Error) {
+		// WithServiceStatusWebHook(func(check config.HealthCheckConfig, statusCode constants.HealthCheckStatus, err errors.Error) {
 		// 	switch statusCode {
 		// 	case constants.Success:
 		// 		logrus.Infof("Custom Handler [%v] health check success\n", check.GetName())
@@ -95,7 +95,7 @@ func main() {
 		// }),
 	)
 
-	checker.AddCheck("profile-api", func(check models.HealthCheckConfig) errors.Error {
+	checker.AddCheck("profile-api", func(check config.HealthCheckConfig) errors.Error {
 		return errors.New("trigger-failure", "")
 	})
 

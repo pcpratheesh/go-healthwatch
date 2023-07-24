@@ -1,10 +1,10 @@
-package models
+package config
 
 import (
 	"time"
 
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
 type CustomHandler func(check HealthCheckConfig) errors.Error

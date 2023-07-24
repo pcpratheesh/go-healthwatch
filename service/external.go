@@ -5,17 +5,17 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
+	"github.com/pcpratheesh/go-healthwatch/config"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
 type ExternalAPI struct {
-	check   models.HealthCheckConfig
-	webHook models.ServiceStatusNotificationHook
+	check   config.HealthCheckConfig
+	webHook config.ServiceStatusNotificationHook
 }
 
 // NewThirdPartyServiceCheck
-func NewThirdPartyServiceCheck(check models.HealthCheckConfig, webHook models.ServiceStatusNotificationHook) *ExternalAPI {
+func NewThirdPartyServiceCheck(check config.HealthCheckConfig, webHook config.ServiceStatusNotificationHook) *ExternalAPI {
 	return &ExternalAPI{
 		check:   check,
 		webHook: webHook,
@@ -59,10 +59,10 @@ func (external *ExternalAPI) Validate() error {
 	return nil
 }
 
-func (external *ExternalAPI) GetCheck() models.HealthCheckConfig {
+func (external *ExternalAPI) GetCheck() config.HealthCheckConfig {
 	return external.check
 }
 
-func (external *ExternalAPI) GetWebHook() models.ServiceStatusNotificationHook {
+func (external *ExternalAPI) GetWebHook() config.ServiceStatusNotificationHook {
 	return external.webHook
 }

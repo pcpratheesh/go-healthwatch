@@ -6,12 +6,12 @@ import (
 	"time"
 
 	gohealthwatch "github.com/pcpratheesh/go-healthwatch"
+	"github.com/pcpratheesh/go-healthwatch/config"
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
-var webhookHandler = func(check models.HealthCheckConfig, statusCode constants.HealthCheckStatus, err errors.Error) {
+var webhookHandler = func(check config.HealthCheckConfig, statusCode constants.HealthCheckStatus, err errors.Error) {
 	if statusCode == constants.Success {
 		fmt.Printf("[%v] health check complete with %v status code \n", check.GetName(), statusCode)
 	}
@@ -23,7 +23,7 @@ var webhookHandler = func(check models.HealthCheckConfig, statusCode constants.H
 
 func main() {
 	checker := gohealthwatch.NewChecker(
-		gohealthwatch.WithIntegrations([]models.HealthCheckConfig{
+		gohealthwatch.WithIntegrations([]config.HealthCheckConfig{
 			{
 				Name:       "public-entries",
 				URL:        "https://api.publicapis.org/entries123",

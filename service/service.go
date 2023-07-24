@@ -3,22 +3,22 @@ package service
 import (
 	"context"
 
+	"github.com/pcpratheesh/go-healthwatch/config"
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
 type ServiceChecker interface {
 	Validate() error
 	Check(context.Context) errors.Error
-	GetCheck() models.HealthCheckConfig
-	GetWebHook() models.ServiceStatusNotificationHook
+	GetCheck() config.HealthCheckConfig
+	GetWebHook() config.ServiceStatusNotificationHook
 }
 
-func InitService(check models.HealthCheckConfig, webhook models.ServiceStatusNotificationHook) ServiceChecker {
+func InitService(check config.HealthCheckConfig, webhook config.ServiceStatusNotificationHook) ServiceChecker {
 	// check where the custom handler is initialized
-	if _, ok := models.CustomHandlerMap[check.Name]; ok {
-		return NewCustomHandlerService(check, models.CustomHandlerMap[check.GetName()], webhook)
+	if _, ok := config.CustomHandlerMap[check.Name]; ok {
+		return NewCustomHandlerService(check, config.CustomHandlerMap[check.GetName()], webhook)
 	}
 
 	switch check.Type {

@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
 	"github.com/pcpratheesh/go-healthwatch/service"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 	"github.com/sirupsen/logrus"
 )
 

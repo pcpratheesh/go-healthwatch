@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	gohealthwatch "github.com/pcpratheesh/go-healthwatch"
+	"github.com/pcpratheesh/go-healthwatch/config"
 	"github.com/pcpratheesh/go-healthwatch/constants"
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
 func main() {
 	checker := gohealthwatch.NewChecker(
-		gohealthwatch.WithIntegrations([]models.HealthCheckConfig{
+		gohealthwatch.WithIntegrations([]config.HealthCheckConfig{
 			{
 				Name:       "public-entries",
 				URL:        "https://api.publicapis.org/entries",
@@ -23,7 +23,7 @@ func main() {
 	)
 
 	// register the handler
-	checker.AddCheck("public-entries", func(check models.HealthCheckConfig) errors.Error {
+	checker.AddCheck("public-entries", func(check config.HealthCheckConfig) errors.Error {
 		// check some other api status before
 		res, err := http.Get("https://catfact.ninja/fact")
 		if err != nil {

@@ -3,17 +3,17 @@ package service
 import (
 	"context"
 
-	"github.com/pcpratheesh/go-healthwatch/errors"
-	"github.com/pcpratheesh/go-healthwatch/models"
+	"github.com/pcpratheesh/go-healthwatch/config"
+	"github.com/pcpratheesh/go-healthwatch/utils/errors"
 )
 
 type customHandler struct {
-	check   models.HealthCheckConfig
-	handler models.CustomHandler
-	webHook models.ServiceStatusNotificationHook
+	check   config.HealthCheckConfig
+	handler config.CustomHandler
+	webHook config.ServiceStatusNotificationHook
 }
 
-func NewCustomHandlerService(check models.HealthCheckConfig, handler models.CustomHandler, webHook models.ServiceStatusNotificationHook) *customHandler {
+func NewCustomHandlerService(check config.HealthCheckConfig, handler config.CustomHandler, webHook config.ServiceStatusNotificationHook) *customHandler {
 	return &customHandler{
 		check:   check,
 		handler: handler,
@@ -29,9 +29,9 @@ func (custom *customHandler) Check(ctx context.Context) errors.Error {
 func (custom *customHandler) Validate() error {
 	return nil
 }
-func (custom *customHandler) GetCheck() models.HealthCheckConfig {
+func (custom *customHandler) GetCheck() config.HealthCheckConfig {
 	return custom.check
 }
-func (custom *customHandler) GetWebHook() models.ServiceStatusNotificationHook {
+func (custom *customHandler) GetWebHook() config.ServiceStatusNotificationHook {
 	return custom.webHook
 }
